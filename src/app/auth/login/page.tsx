@@ -441,7 +441,7 @@ export default function LoginPage() {
             
             <div>
               <span className="text-xs text-gray-400">
-                Don't have an account?{' '}
+                Don&apos;t have an account?{' '}
               </span>
               <Link 
                 href="/auth/signup" 

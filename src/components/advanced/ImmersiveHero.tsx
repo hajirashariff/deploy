@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { useSpring as useReactSpring, animated } from '@react-spring/web'
+// Removed @react-spring/web import to avoid React Native conflicts
 import { useGesture } from '@use-gesture/react'
 import { ArrowRight, Play, Zap, Shield, Users, BarChart3 } from 'lucide-react'
 

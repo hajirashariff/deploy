@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
-import { useSpring, animated } from '@react-spring/web'
+// Removed @react-spring/web import to avoid React Native conflicts
 import { useGesture } from '@use-gesture/react'
 import { Shield, Menu, X, Home, Users, Settings, BarChart3, MessageSquare } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
@@ -56,11 +56,11 @@ export function MorphingNavigation() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Orbital Menu Animation
-  const orbitalSpring = useSpring({
-    transform: isOpen ? 'rotate(0deg)' : 'rotate(180deg)',
-    config: { tension: 300, friction: 30 }
-  })
+  // Orbital Menu Animation - using Framer Motion instead
+  const orbitalVariants = {
+    open: { rotate: 0 },
+    closed: { rotate: 180 }
+  }
 
   // Magnetic Button Component with Hover Effects
   function MagneticButton({ children, index, onClick }: { children: React.ReactNode, index: number, onClick: () => void }) {
@@ -401,8 +401,10 @@ export function MorphingNavigation() {
 
       {/* Orbital Menu for Desktop */}
       <div className="hidden md:block fixed top-20 right-8">
-        <animated.div
-          style={orbitalSpring}
+        <motion.div
+          variants={orbitalVariants}
+          animate={isOpen ? "open" : "closed"}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
           className="relative w-32 h-32"
         >
           {navItems.map((item, index) => (
@@ -414,7 +416,7 @@ export function MorphingNavigation() {
               <item.icon className="h-5 w-5 text-white" />
             </MagneticButton>
           ))}
-        </animated.div>
+        </motion.div>
       </div>
     </motion.nav>
   )

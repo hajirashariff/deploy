@@ -388,7 +388,7 @@ export default function CustomerDashboard() {
                   <Mail className="h-8 w-8 mx-auto mb-4 text-purple-500" />
                   <h3 className="font-medium mb-2">Email Support</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Send us an email and we'll respond quickly
+                    Send us an email and we&apos;ll respond quickly
                   </p>
                   <Button size="sm" variant="outline">Send Email</Button>
                 </div>

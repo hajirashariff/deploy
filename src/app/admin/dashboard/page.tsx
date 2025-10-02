@@ -189,7 +189,7 @@ export default function AdminDashboard() {
             Welcome back, {user?.full_name || 'Admin'}!
           </h2>
           <p className="text-muted-foreground">
-            Here's what's happening with your BSM Platform today.
+            Here&apos;s what&apos;s happening with your BSM Platform today.
           </p>
         </div>
 

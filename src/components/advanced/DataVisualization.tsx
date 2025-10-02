@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useSpring, animated } from '@react-spring/web'
+// Removed @react-spring/web import to avoid React Native conflicts
 import { BarChart3, TrendingUp, Users, Zap, Activity, Brain } from 'lucide-react'
 
 interface DataPoint {

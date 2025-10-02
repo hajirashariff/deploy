@@ -264,7 +264,7 @@ export default function AdminPortal() {
             Welcome back, {user?.full_name || 'Admin'}!
           </h2>
           <p className="text-gray-600">
-            Here's what's happening with your BSM Platform today.
+            Here&apos;s what&apos;s happening with your BSM Platform today.
           </p>
         </div>
 
