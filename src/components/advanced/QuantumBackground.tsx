@@ -94,7 +94,10 @@ function FluidSimulation() {
     if (mesh.current) {
       mesh.current.rotation.x = state.clock.elapsedTime * 0.2
       mesh.current.rotation.y = state.clock.elapsedTime * 0.1
-      mesh.current.material.uniforms.time.value = state.clock.elapsedTime
+      const material = mesh.current.material as THREE.ShaderMaterial
+      if (material.uniforms) {
+        material.uniforms.time.value = state.clock.elapsedTime
+      }
     }
   })
 

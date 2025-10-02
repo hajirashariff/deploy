@@ -94,7 +94,6 @@ export function MorphingNavigation() {
     return (
       <motion.button
         ref={buttonRef}
-        {...bind()}
         onClick={onClick}
         className="relative p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all duration-300"
         whileHover={{ scale: 1.2 }}

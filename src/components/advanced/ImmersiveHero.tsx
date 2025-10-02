@@ -86,7 +86,6 @@ export function ImmersiveHero() {
     return (
       <motion.button
         ref={buttonRef}
-        {...bind()}
         onClick={onClick}
         className={`relative px-8 py-4 rounded-xl font-semibold text-lg overflow-hidden group ${
           variant === 'primary' 
