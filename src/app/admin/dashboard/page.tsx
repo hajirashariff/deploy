@@ -18,7 +18,10 @@ import {
   Settings,
   LogOut,
   Bell,
-  Search
+  Search,
+  Star,
+  ShoppingCart,
+  Heart
 } from 'lucide-react'
 import { useAuth } from '@/components/providers/auth-provider'
 import { supabase } from '@/lib/supabase/client'
@@ -37,6 +40,11 @@ export default function AdminDashboard() {
     activeWorkflows: 0
   })
   const [recentTickets, setRecentTickets] = useState<any[]>([])
+  const [customerInsights, setCustomerInsights] = useState<any>({
+    summary: {},
+    recentServiceRequests: [],
+    recentRatings: []
+  })
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -49,6 +57,10 @@ export default function AdminDashboard() {
 
   const fetchDashboardData = async () => {
     try {
+      // Fetch customer insights data
+      const insightsResponse = await fetch('/api/admin/customer-insights')
+      const insightsData = await insightsResponse.json()
+      
       // Mock data for frontend development
       const mockTickets = [
         {
@@ -78,17 +90,18 @@ export default function AdminDashboard() {
       ]
 
       setStats({
-        totalTickets: 156,
-        openTickets: 23,
-        resolvedTickets: 133,
+        totalTickets: (insightsData.summary?.total_services || 0) + 156,
+        openTickets: insightsData.summary?.active_requests || 23,
+        resolvedTickets: insightsData.summary?.completed_requests || 133,
         avgResponseTime: 2.5,
-        satisfactionRating: 4.2,
+        satisfactionRating: insightsData.summary?.average_rating || 4.2,
         totalUsers: 45,
-        knowledgeBaseArticles: 28,
+        knowledgeBaseArticles: insightsData.summary?.help_articles || 28,
         activeWorkflows: 12
       })
 
       setRecentTickets(mockTickets)
+      setCustomerInsights(insightsData)
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
     } finally {
@@ -296,6 +309,94 @@ export default function AdminDashboard() {
                 <Search className="h-4 w-4 mr-2" />
                 Search Tickets
               </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Customer Insights Section */}
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Recent Service Requests */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <ShoppingCart className="h-5 w-5 mr-2" />
+                Customer Service Requests
+              </CardTitle>
+              <CardDescription>
+                Recent service requests from customers
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {customerInsights.recentServiceRequests.length > 0 ? (
+                  customerInsights.recentServiceRequests.slice(0, 5).map((request: any) => (
+                    <div key={request.request_id} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div className="flex-1">
+                        <h5 className="font-medium text-sm">{request.service_name}</h5>
+                        <p className="text-xs text-muted-foreground">{request.service_category}</p>
+                      </div>
+                      <div className="text-right">
+                        <Badge variant={request.status === 'completed' ? 'default' : 'secondary'}>
+                          {request.request_status}
+                        </Badge>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          ${request.service_price}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-4 text-muted-foreground text-sm">
+                    No recent service requests
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Customer Ratings */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Star className="h-5 w-5 mr-2" />
+                Customer Ratings
+              </CardTitle>
+              <CardDescription>
+                Recent feedback from customers
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {customerInsights.recentRatings.length > 0 ? (
+                  customerInsights.recentRatings.slice(0, 5).map((rating: any) => (
+                    <div key={rating.rating_id} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2 mb-1">
+                          <div className="flex">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star
+                                key={star}
+                                className={`h-3 w-3 ${star <= rating.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-sm font-medium">{rating.rating_label}</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">{rating.service_name}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-muted-foreground">
+                          {new Date(rating.rating_date).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-4 text-muted-foreground text-sm">
+                    No recent ratings
+                  </div>
+                )}
+              </div>
             </CardContent>
           </Card>
         </div>
